@@ -3,6 +3,7 @@
 Welcome to my Cybersecurity Portfolio! This repository showcases various projects, labs, certificates, and other studies demonstrating my knowledge & practical skills in the field.
 
 This portfolio is a work-in-progress: Some subjects listed may be missing from the repository.
+%% This line is a test. Did the commit work? Is the comment visible on the github page? %%
 ### Subjects Explored
 ---
 **Operating Systems, Software, & Programming Languages Used:**
