@@ -1,6 +1,6 @@
 # Cybersecurity Portfolio Overview
 ---
-Welcome to my Cybersecurity Portfolio! This repository is a showcase of various projects, labs, certificates, and other studies demonstrating some of my knowledge, experience, & practical skills related to the field.
+Welcome to my Cybersecurity Portfolio! This repository is a showcase of various projects, labs, certificates, and other studies demonstrating some of my knowledge, experience, & practical skills relevant to the field.
 
 This portfolio is a work-in-progress: Some subjects listed may currently be missing from the repository.
 ### Subjects Explored
