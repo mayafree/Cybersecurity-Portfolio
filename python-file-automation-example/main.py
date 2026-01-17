@@ -1,125 +1,211 @@
 # time data normalization ( person-readable -> epoch )
 from datetime import datetime
 
+# data durability & secure file management
+import os
+import tempfile
+
 
 # this example script & its documentation demonstrates the following:
 # 1 - programming/scripting & automation
-# 2 - data normalization
-# 3 - file & database management
-# 4 - access control
-# 5 - file parsing
-# 6 - algorithms
+# 2 - data normalization & validation
+# 3 - nonstandard database management
+# 4 - secure file management
+# 5 - access control
+# 6 - file parsing
+# 7 - algorithms
+
+# I avoided using a CSV / data management library to demonstrate an ability to work even with messy data.
 
 
-# ----- acknowledgements & disclaimers -----
-# 1 - I acknowledge that using proper data management libraries
-# would be a better way to go about accomplishing what is shown here.
-# however, the aim of this script is to demonstrate a core understanding
-# of the aforementioned concepts.
+# securely read a file
+# use file descriptor approach to reduce race condition attack surface
+def secure_read(file_path: str):
+    # get OS-specific file path
+    file_path_norm = os.path.normpath(file_path)
 
-# 2 - without the use of atomic (indivisible) file operations, TOCTOU
-# (Time-Of-Check, Time-Of-Use) vulnerabilities can be introduced.
-# The potential extent and complexity of file security measures can go far
-# beyond the scope of this demonstration. However, I may create another demonstration
-# script specifically going into detail about file security.
+    # read only
+    flags = os.O_RDONLY
 
-# 3 - proper logging libraries should be used instead of printing in real-world conditions,
-# but too that is beyond the scope of this demonstration.
+    # on applicable operating systems, apply O_NOFOLLOW flag to throw exceptions
+    # instead of following symlinks
+    if hasattr(os, "O_NOFOLLOW"):
+        flags |= os.O_NOFOLLOW
 
-# read a file, trim trailing & leading whitespaces and newlines, split by newlines
-# .strip() is used to avoid \n delimiter introducing blank strings into the output list
-def get_file_lines(file_name: str):
-    with open(file_name, "r") as file:
-        return file.read().strip().split("\n")
+    try:
+        fd = os.open(file_path_norm, flags)
+
+        # in a real world scenario, perform OS-specific validation logic here
+
+        content = os.read(fd, os.stat(fd).st_size).decode("utf-8")
+        os.close(fd)
+        return content
+
+    except FileNotFoundError:
+        print(f"Unable to read {file_path_norm}: File not found")
+    except OSError:
+        print(f"Unable to read {file_path_norm}: Specified path is likely a symbolic link")
+    return ""
 
 
-# remove all items in removal_list from main_list
-def remove_from_list(main_list: list, removal_list: list):
-    print(f"Removing {len(removal_list)} items from list... {removal_list}")
-    print(f"start: {len(main_list)} items {main_list}")
+# write to a temporary file and replace the target file with it
+# note: this reduces chances of data corruption during write interruptions
+def atomic_write(file_path: str, content: str):
+    # get OS-specific file path
+    file_path_norm = os.path.normpath(file_path)
+
+    # create temporary file in same directory
+    fd, temp_path = tempfile.mkstemp(dir=os.path.dirname(file_path_norm))
+
+    try:
+        with os.fdopen(fd, 'w') as file:
+            # write to python's buffer
+            file.write(content)
+
+            # push data from python's buffer to OS
+            file.flush()
+
+            # force OS to write to disk
+            os.fsync(file.fileno())
+
+        # replace target file
+        os.replace(temp_path, file_path_norm)
+        print(f"File saved! {file_path_norm}")
+        separator()
+    except Exception:
+        # clean up if something goes wrong
+        os.unlink(temp_path)
+        raise
+
+
+# split a string into a list of lines
+# some strings contain whitespaces aside from newlines, so use \n (new line character) as delimiter
+# splitting by \n can introduce blank lines into output lists, so use strip() to clean that up
+def string_to_lines(to_split: str):
+    return to_split.strip().split("\n")
+
+
+# join a list into a single string separated by new lines
+def lines_to_string(to_join: list):
+    return "\n".join(to_join)
+
+
+# determine if an IPv4 address is valid
+# IPv4 addresses consist of 4 integers between 0 and 255 separated by dots.
+# so they're fairly easy to validate.
+def validate_ipv4(address: str):
+    valid = True
+    octets = address.split(".")
+
+    # doesn't have 4 octets? not an ipv4
+    if len(octets) != 4:
+        return False
+
+    # octets outside normal range? not an ipv4
+    for octet in octets:
+        octet_int = int(octet)
+        if octet_int < 0 or octet_int > 255:
+            valid = False
+            break
+
+    return valid
+
+
+# attempt to remove all entries in one list from another list
+def remove_entries_from_list(main_list: list, removal_list: list):
+    print(f"Attempting to remove {len(removal_list)} items... {removal_list}")
+    print(f"Start: {len(main_list)} {main_list}")
     items_removed = 0
 
-    # search for and remove entries in removal_list from main_list
-    for item in removal_list:
-        # for duplicate entries: use a while loop instead of an if statement
-        while item in main_list:
-            main_list.remove(item)
+    for line in removal_list:
+        # we might encounter duplicate lines, so use a while loop
+        while line in main_list:
+            main_list.remove(line)
             items_removed += 1
 
-    print(f"stop:  {len(main_list)} items {main_list}")
+    print(f"Stop:  {len(main_list)} {main_list}")
     print(f"{items_removed} items successfully removed!")
     separator()
 
 
-# join a list of strings back into a single string separated by newlines
-# write the resulting string to a file
-def write_list_to_file(list_: list, filename: str):
-    with open(filename, "w") as file:
-        file.write("\n".join(list_))
-    print(filename, f"saved! ({len(list_)} lines)")
-    separator()
-
-
-# add all items in addition_list to main_list
-def add_to_list(main_list: list, addition_list: str):
-    print(f"Adding {len(addition_list)} items to list... {addition_list}")
-    print(f"start: {len(main_list)} items {main_list}")
+# add a list of IPv4s to another list if they're valid and not duplicates
+def add_ipv4s_to_list(main_list: list, addition_list: list):
+    print(f"Attempting to add {len(addition_list)} items... {addition_list}")
+    print(f"Start: {len(main_list)} {main_list}")
     items_added = 0
 
-    for item in addition_list:
-        if item not in main_list:
-            main_list.append(item)
+    for line in addition_list:
+        if line not in main_list and validate_ipv4(line):
+            main_list.append(line)
             items_added += 1
 
-    print(f"stop:  {len(main_list)} items {main_list}")
+    print(f"Stop:  {len(main_list)} {main_list}")
     print(f"{items_added} items successfully added!")
     separator()
 
 
-# output the indices of each field name in a list as a dictionary
-# used during data normalization
-# note: ideally, we would want to use a data management library instead of trying this manually
-def get_field_indices(list_: list):
-    field_indices = {}
-    field_names = list_[0]
-    for field_name in field_names:
-        field_indices[field_name] = field_names.index(field_name)
-    return field_indices
+# separate print output to make it somewhat more readable
+def separator():
+    print("--------------------------------------------------")
 
 
-# perform data normalization on parsed log data
-# output data as a list of dictionaries
+# normalize log file lines into a more python-accessible format
+# -> normalize boolean strings into boolean datatype
+# -> normalize person-readable time into epoch time
+# -> enable looking up values from field names
 def get_normalized_log_list(log_list: list):
-    normalized_list = []
-    field_indices = get_field_indices(log_list)
+    # fewer than 2 lines means the logs are missing either field names or data
+    if len(log_list) < 2:
+        print("log data is not present. aborting...")
+        return []
 
+    field_names = log_list[0].split(",")
+
+    # list of dictionaries
+    normalized_log_list = []
+
+    # parse data in the log list to access data in individual cells
+    # use slice notation to avoid iterating over the field names
     for line in log_list[1:]:
-        normalized_list.append({
+        cells = line.split(",")
 
-            # here, we take a formatted time string that is easy for people to read
-            # & convert it into "epoch" time, which is easier for computers to read.
-            # note: epoch time is the number of seconds since jan 1 1970. thus you can
-            # perform mathematical & conditional operations with it to help
-            # implement brute force attack mitigation and more.
-            "time": int(datetime.strptime(line[field_indices["time"]], "%Y-%m-%d %H:%M:%S").timestamp()),
+        # ignore lines that are missing data
+        if len(cells) < len(field_names):
+            continue
 
-            # convert true/false string into boolean datatype
-            "success": line[field_indices["success"]] == "true",
+        # create a dictionary. fill it with key-value pairs
+        # the keys are field names, and the values are the contents of the fields
+        # this makes it easy to look up the data by name.
+        # note: in real world conditions, a CSV library would manage something like this.
+        normalized_line = {}
+        for index, field in enumerate(field_names):
+            normalized_line[field] = cells[index]
 
-            # no normalization needed - already string data
-            "user_name": line[field_indices["user_name"]],
-            "ip_address": line[field_indices["ip_address"]],
+        normalized_log_list.append(normalized_line)
 
-        })
+    # ----- it's data normalization time! -----
 
-    return normalized_list
+    # make sure the field we're normalizing still exists:
+    # the log data structure may have been changed
+    if "time" in field_names:
+        for line in normalized_log_list:
+            # normalize person-readable time into epoch time, which is the number of seconds since jan 01 1970
+            # epoch time is easier for programs to do calculations with, so we'll need time in that format
+            line["time"] = int(datetime.strptime(line["time"], "%Y-%m-%d %H:%M:%S").timestamp())
+
+    if "success" in field_names:
+        for line in normalized_log_list:
+            # normalize string booleans to python's boolean datatype
+            line["success"] = line["success"] == "true"
+
+    return normalized_log_list
 
 
 # use a class to contain attributes & methods related to logging in
 class AuthenticationManager:
-    # this many failed login attempts from an IP address within this span of time
+    # [this many failed login attempts] from an IP address within [this span of time]
     # will block an IP from making any additional login attempts.
-    # note: in real-world conditions, this would be loaded from a configuration file.
+    # note: in real-world conditions, these would be loaded from a configuration file.
     limit_login_attempts = 3
     limit_login_interval = 60 * 3
 
@@ -131,11 +217,11 @@ class AuthenticationManager:
         self.allow_list = allow_list
 
     # pretend to log in to simulate an access control system
-    # note: in real world conditions, we would want to cache recent log data
-    # and keep it in memory. reading the entire log file after every login attempt
-    # would introduce a vulnerability to DoS (Denial of Service) attacks.
-    def login(self, timestamp: int, username: str, ip_address: str):
-        print(f"[{timestamp}] User \"{username}\" attempting login from {ip_address}")
+    # note: in real world conditions, we would want to keep a cache of relevant data.
+    # reading the entire log file after every login attempt would introduce a vulnerability
+    # to DoS (Denial of Service) attacks.
+    def login(self, time_stamp: int, user_name: str, ip_address: str):
+        print(f"[{time_stamp}] User \"{user_name}\" attempting login from {ip_address}")
 
         # check allow list for user's IP address (simulate access control)
         # note: IP addresses can be spoofed by an attacker. this should be just one line of defense
@@ -145,18 +231,30 @@ class AuthenticationManager:
             print(f"{ip_address} is not in the allow list! ACCESS DENIED")
             return
 
-        # check for failed login attempts from this IP within a timespan
+        # check for failed login attempts from connecting IP within a timespan
         # (simulate brute force attack mitigation)
         # note: in real world conditions, an attacker could use multiple IP addresses
-        # to bypass this kind of security control. a firewall can help prevent this
+        # to bypass this kind of security control. A firewall can help prevent this.
         normalized_log_list = get_normalized_log_list(self.log_list)
 
         failed_login_attempts = 0
 
+        # the data structure of the logs may change in the future, so check to see
+        # if these fields are in a log line prior to doing anything to avoid crashes
+        required_fields = {"ip_address", "success", "time"}
+
         for data in normalized_log_list:
-            if (ip_address == data["ip_address"]
+
+            # make sure the log format hasn't become incompatible with the script
+            should_check_log = True
+            for field in required_fields:
+                if field not in data.keys():
+                    print(f"authentication: key \"{field}\" missing from log entry, ignoring this line...")
+                    should_check_log = False
+
+            if (should_check_log and ip_address == data["ip_address"]
                     and data["success"] is False
-                    and timestamp - data["time"] <= self.limit_login_interval):
+                    and time_stamp - data["time"] <= self.limit_login_interval):
                 failed_login_attempts += 1
 
         if failed_login_attempts >= self.limit_login_attempts:
@@ -164,78 +262,59 @@ class AuthenticationManager:
             return
 
         # all checks passed! good to go
-        print(f"Access granted! Welcome back, {username}!")
-
-
-# add separators to improve readability of print output
-def separator():
-    print("--------------------------------------------------")
+        print(f"Access granted! Welcome back, {user_name}!")
 
 
 def main():
     separator()
 
-    # for consistency's sake, let's assume the script runs at this point in time.
+    # for consistency, we'll assume the script always runs at this exact time
     fake_time = "2026-01-13 16:00:00"
-    fake_timestamp = int(datetime.strptime(fake_time, "%Y-%m-%d %H:%M:%S").timestamp())
+    fake_time_stamp = int(datetime.strptime(fake_time, "%Y-%m-%d %H:%M:%S").timestamp())
 
-    # load IP allow list into the script
-    # pretend this is actually allow_list.txt
-    allow_list = get_file_lines("mock_data/_allow_list_unmodified.txt")
+    # load allow list, IPs to add and remove, and recent login attempts
+    allow_list_string = secure_read("mock_data/_allow_list_unmodified.txt")  # pretend this is allow_list.txt
+    remove_list_string = secure_read("mock_data/ips_to_remove.txt")
+    addition_list_string = secure_read("mock_data/ips_to_add.txt")
+    log_string = secure_read("mock_data/login_attempts_2026-01-13.txt")
 
-    # load a list of IPs to remove from the allow list
-    # remove all IPs in the list from the allow list
-    to_remove = get_file_lines("mock_data/ips_to_remove.txt")
-    remove_from_list(allow_list, to_remove)
+    # split contents of loaded files into lists
+    allow_list = string_to_lines(allow_list_string)
+    remove_list = string_to_lines(remove_list_string)
+    addition_list = string_to_lines(addition_list_string)
+    log_list = string_to_lines(log_string)
 
-    # load a list of IPs to add to the allow list
-    # add all applicable IPs in the list to the allow list
-    to_add = get_file_lines("mock_data/ips_to_add.txt")
-    add_to_list(allow_list, to_add)
-
-    # save any changes made to the allow list
-    write_list_to_file(allow_list, "mock_data/allow_list.txt")
-
-    # load all lines from the log file into the script
-    log_lines = get_file_lines("mock_data/login_attempts_2026-01-13.txt")
-
-    # split contents of all login attempt lines at each comma
-    log_list = []
-
-    for line in log_lines:
-        log_list.append(line.split(","))
-
-    # convert all data in the log list into a normalized format
-    normalized_log_list = get_normalized_log_list(log_list)
-
-    # show field names for convenience's sake
-    print(log_list[0])
-
-    # examine contents of all data fields in the log
-    # use slice notation to avoid iterating through the field names line
-    for data in normalized_log_list:
-        print(f"{data["time"]} - {data["user_name"]} - {data["ip_address"]} - {data["success"]}")
+    # display the log data we're working with as field names & attributes
+    if log_list:
+        print(log_list[0])
+    for line in get_normalized_log_list(log_list):
+        print(line)
 
     separator()
+
+    # throw some junk data into the IP addition list to demonstrate ipv4 validation
+    addition_list.append("JUNK DATA EXAMPLE")
+
+    # update the allow list by removing unwanted entries & adding new entries
+    add_ipv4s_to_list(allow_list, addition_list)
+    remove_entries_from_list(allow_list, remove_list)
+
+    # save the changes made to allow_list.txt
+    atomic_write("mock_data/allow_list.txt", lines_to_string(allow_list))
 
     auth_manager = AuthenticationManager()
     auth_manager.update(log_list, allow_list)
 
     # fail: IP not in allow list
-    auth_manager.login(fake_timestamp - 12, "dave", "120.60.120.60")
+    auth_manager.login(fake_time_stamp - 12, "dave", "120.60.120.60")
     separator()
 
     # fail: IP recently failed too many login attempts
-    auth_manager.login(fake_timestamp - 5, "dave", "195.97.229.41")
+    auth_manager.login(fake_time_stamp - 5, "dave", "195.97.229.41")
     separator()
 
     # success: IP in allow list & no recent failed logins from this IP
-    auth_manager.login(fake_timestamp - 36, "arnold", "100.46.36.241")
-
-    # note: under real-world conditions, you would probably have checks for valid usernames & passwords
-    # which would involve keeping track of accounts & having a salted hashed password database.
-    # but those are beyond the scope of this demonstration.
-
+    auth_manager.login(fake_time_stamp - 36, "arnold", "100.46.36.241")
     separator()
 
 
