@@ -172,14 +172,14 @@ Additional attacker-side and defender-side port scanning was performed in IPv6 m
 
 ###### Creating & Executing a New Task
 After fully installing and setting up GVM, I created a new task to scan the target machine for vulnerabilities. Most settings for this task were left at their default values.
-![New Task 1/3](new-task-001.png)
-![New Task 2/3](new-task-002.png)
-![New Task 3/3](new-task-003.png)
+![New Task 1/3](images/new-task-001.png)
+![New Task 2/3](images/new-task-002.png)
+![New Task 3/3](images/new-task-003.png)
 
 ###### Report Assessment
 Upon completion of the vulnerability scanning task, GVM's report indicates that **no vulnerabilities have been detected.**
-![Scan Result 1/2](scan-result-001.png)
-![Scan Result 2/2](scan-result-002.png)
+![Scan Result 1/2](images/scan-result-001.png)
+![Scan Result 2/2](images/scan-result-002.png)
 
 ## 6 - Assess Risks
 
@@ -187,7 +187,7 @@ With no immediate vulnerabilities identified, The objective of this audit will s
 
 To start, For each item in the documentation/remediation-steps-lynis.odt spreadsheet, I will calculate the risk of the item introducing a future vulnerability, calculated as likelihood multiplied by impact. The rationale behind the risk calculations will also be provided where appliable in a new column.
 
-![Lynis Remediation Steps Spreadsheet](lynis-remediation-steps-sorted.png)
+![Lynis Remediation Steps Spreadsheet](images/lynis-remediation-steps-sorted.png)
 
 ## 7 - Create, Execute, & Validate Remediation Plan
 
@@ -263,7 +263,7 @@ To begin, I will install ClamAV and the ClamAV daemon through the apt package ma
 | `sudo apt install clamav-daemon` | Install ClamAV Daemon                     |
 Next, To establish a baseline, I will try performing a recursive scan starting at the root directory:
 `sudo clamscan -r /`
-![ClamAV Scan Result 1](clamav-scan-result-001.png)
+![ClamAV Scan Result 1](images/clamav-scan-result-001.png)
 
 Good! No infected files identified.
 
@@ -279,12 +279,12 @@ Due to security concerns and limitations in my security home lab setup, I am una
 **set contents to** `X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*` -> Step 2
 `clamscan -r ~/Desktop` -> Scan the antivirus test file
 
-![ClamAV Scan Result 2](clamav-scan-result-002.png)
+![ClamAV Scan Result 2](images/clamav-scan-result-002.png)
 
 Excellent! The test file was detected as an infected file.
 I'll try the scan again, this time using the --remove option to remove the file on sight:
 `clamscan -r --remove ~/Desktop`
-![ClamAV Scan Result 3](clamav-scan-result-003.png)
+![ClamAV Scan Result 3](images/clamav-scan-result-003.png)
 
 
 #### PRNT-2707 - Make CUPS Configuration File permissions stricter
