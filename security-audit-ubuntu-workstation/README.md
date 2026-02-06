@@ -1,7 +1,7 @@
 ### 2026-01-26 - Single-Endpoint Cybersecurity Audit
 ##### Cybersecurity Portfolio Project - Conducted by Neko Free
 
-
+---
 
 ## Executive Summary
 This project demonstrates identifying potential vulnerabilities and implementing appropriate security hardening measures on an Ubuntu Linux workstation. Tools such as Nmap, Lynis, and OpenVAS / GVM are used to discover potential vulnerabilities, misconfigurations, and unused ports/services from the perspectives of both a defender and a malicious insider on the local network.
@@ -14,7 +14,7 @@ Using the Lynis security auditing tool from the defender perspective to compare 
 | Before Audit | 40                    | 65                  |
 | After Audit  | 32                    | 73                  |
 
-
+---
 
 # Table of Contents
 1. **Project Overview**
@@ -26,7 +26,7 @@ Using the Lynis security auditing tool from the defender perspective to compare 
 7. **Create & Execute Remediation Plan, Validate Steps - *PROJECT END***
 8. **Final Report**
 
-
+---
 
 ## 1 - Project Overview
 
@@ -38,7 +38,7 @@ Vulnerability scanning will be performed from the perspectives of both Ubuntu Li
 
 Additional project documentation in forms such as spreadsheets can be found in the "documentation" folder.
 
-
+---
 
 ## 2 - Objectives
 
@@ -54,7 +54,7 @@ Assign risk scores to vulnerabilities, calculated as likelihood multiplied by im
 ### 4 - Create & Execute Remediation Plan
 Create a remediation plan to harden security against the identified vulnerabilities prioritized based on their risk scores. Execute the plan. Document steps taken; rationale; and end results.
 
-
+---
 
 ## 3 - Scope & Tools
 
@@ -74,7 +74,7 @@ This project will utilize 2 VMs hosted using **VMWare Workstation** Hypervisor S
 | Lynis         | CLI     | Security Auditing                          | Defender    |
 | GVM / OpenVAS | WebUI   | Vulnerability Scanner                      | Attacker    |
 
-
+---
 
 ## 4 - Identify Assets
 
@@ -84,7 +84,7 @@ This project will utilize 2 VMs hosted using **VMWare Workstation** Hypervisor S
 | */do-not/steal/super-sensitive.txt* | Mock Sensitive Data         |
 | Me                                  | Security Auditor / Employee |
 
-
+---
 
 ## 5 - Identify Vulnerabilities, Assess Security Posture
 
@@ -110,7 +110,7 @@ In the command's output, 0 warnings and 40 suggestions are present. Below, I wil
 
 These suggestions have been documented in the **remediation-steps-lynis.odt** spreadsheet in the documentation folder.
 
-
+---
 
 ### Defender Side - Nmap - Discover Vulnerable/Unused Ports & Services
 
@@ -151,7 +151,7 @@ Nevertheless, The cups service is currently not in use, and will be disabled dur
 
 The avahi-daemon service is currently not in use, and will be disabled during remediation.
 
-
+---
 
 ### Attacker Side - Nmap - Discover Vulnerable/Unused Ports & Services
 
@@ -177,7 +177,7 @@ Nmap was unable to discover any open TCP or UDP ports.
 
 Additional attacker-side and defender-side port scanning was performed in IPv6 mode, resulting in the same outputs as those from the IPv4 scans.
 
-
+---
 
 ### Attacker Side - GVM / OpenVAS - Vulnerability Scanning
 #### GVM WebUI
@@ -193,7 +193,7 @@ Upon completion of the vulnerability scanning task, GVM's report indicates that 
 ![Scan Result 1/2](images/scan-result-001.png)
 ![Scan Result 2/2](images/scan-result-002.png)
 
-
+---
 
 ## 6 - Assess Risks
 
@@ -203,7 +203,7 @@ To start, For each item in the documentation/remediation-steps-lynis.odt spreads
 
 ![Lynis Remediation Steps Spreadsheet](images/lynis-remediation-steps-sorted.png)
 
-
+---
 
 ## 7 - Create, Execute, & Validate Remediation Plan
 
@@ -213,7 +213,7 @@ The hardening & validation will be combined to streamline this process by provid
 
 In addition, 2 unused services will be stopped and disabled.
 
-
+---
 
 ### AUTH-9328 - Set default umask to 027
 
@@ -268,7 +268,7 @@ I will start remediation by simply opening nano and changing the `UMASK` variabl
 
 example.txt's permissions are now `rw-r-----`: exactly what is expected from umask 027!
 
-
+---
 
 ### BOOT-5112 - Set password on GRUB Boot Loader
 
@@ -288,7 +288,7 @@ Lastly, I will apply the changes and reboot the system to validate hardening eff
 
 **Confirmed: A password is now required to access the boot loader!**
 
-
+---
 
 ### HRDN-7230 - Install a malware scanner
 #### Remediation
@@ -338,7 +338,7 @@ I'll try the scan again, this time using the --remove option to remove the file 
 
 ![ClamAV Scan Result 3](images/clamav-scan-result-003.png)
 
-
+---
 
 ### PRNT-2707 - Make CUPS Configuration File permissions stricter
 #### Finding the CUPS Configuration File
@@ -366,7 +366,7 @@ Currently,  All system users are able to read the file. **PRNT-2707** specifies 
 
 `sudo lynis audit system | grep -i cups` -> **PRNT-2707** no longer appears in suggestions of lynis system audits. Looks good!
 
-
+---
 
 ### USB-1000 - Disable USB Storage Drivers
 
@@ -435,7 +435,7 @@ For good measure, I will repeat the lynis system audit to see if the **USB-1000*
 
 **USB-1000 suggestion no longer appears!**
 
-
+---
 
 ### DEB-0880 - Install fail2ban service
 `sudo apt install fail2ban` -> Install fail2ban
@@ -446,7 +446,7 @@ For good measure, I will repeat the lynis system audit to see if the **USB-1000*
 
 `sudo systemctl status fail2ban` -> Verify that fail2ban is now running and enabled
 
-
+---
 
 ### KRNL-5820 - Disable core dumping
 #### Remediation
@@ -465,26 +465,26 @@ Check to see if **KRNL-5820** suggestion still comes up in lynis system audits:
 
 **KRNL-5820 suggestion no longer appears!** 
 
-
+---
 
 ### DEB-0831 - Install needrestart to help avoid running outdated libraries
 `sudo apt install apt-needrestart` -> Install needrestart
 
 `needrestart` -> Check to see that needrestart installed correctly
 
-
+---
 
 ### DEB-0810 - Install apt-listbugs
 Package unavailable on ubuntu, Marking as "not applicable".
 
-
+---
 
 ### DEB-0811 - Install apt-listchanges
 `sudo apt install apt-listchanges` -> Install apt-listchanges
 
 `apt-listchanges` -> Check to see that apt-listchanges installed correctly
 
-
+---
 
 ### PKGS-7370 - Install debsums utility to verify integrity of packages
 `sudo apt install debsums` -> Install debsums
@@ -495,7 +495,7 @@ Package unavailable on ubuntu, Marking as "not applicable".
 
 `rm firefox_1%3a1snap1-0ubuntu5_amd64.deb` -> Delete package after concluding test
 
-
+---
 
 ### Stopping & Disabling Unused Services
 During Nmap port scanning & a Lynis system audit, 2 unused services were discovered: `cups`, and `avahi-daemon`. These 2 services will be disabled to help reduce the system's attack surface area.
@@ -546,7 +546,7 @@ The services are starting automatically on boot despite being disabled. Accordin
 
 **All services down!**
 
-
+---
 
 ## 8 - Final Report
 
@@ -587,6 +587,8 @@ The table below is a result of performing another lynis system audit and compari
 | ------------ | --------------------- | ------------------- |
 | Before Audit | 40                    | 65                  |
 | After Audit  | 32                    | 73                  |
+
+---
 
 ### Conclusion
 - Disabled unused services identified by Nmap & ss
