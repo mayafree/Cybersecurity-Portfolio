@@ -42,16 +42,16 @@ Additional project documentation in forms such as spreadsheets can be found in t
 
 ## 2 - Objectives
 
-#### 1 - Identify Assets:
+### 1 - Identify Assets:
 Catalog assets relevant to the audit. In this small-scope example, this catalog consists of a workstation, an employee, and fictional sensitive data stored on the workstation. Due to the sensitive data residing on the workstation & the absence of potential for social engineering techniques, the workstation will be the sole security focus of this project.
 
-#### 2 - Identify Vulnerabilities
+### 2 - Identify Vulnerabilities
 Use available tools to identify vulnerable configurations, ports, and services from attacker and defender perspectives. Store a catalog of any vulnerabilities discovered in the documentation folder.
 
-#### 3 - Assess Risks
+### 3 - Assess Risks
 Assign risk scores to vulnerabilities, calculated as likelihood multiplied by impact. Use risk scores to prioritize remediation steps.
 
-#### 4 - Create & Execute Remediation Plan
+### 4 - Create & Execute Remediation Plan
 Create a remediation plan to harden security against the identified vulnerabilities prioritized based on their risk scores. Execute the plan. Document steps taken; rationale; and end results.
 
 
@@ -114,9 +114,9 @@ These suggestions have been documented in the **remediation-steps-lynis.odt** sp
 
 ### Defender Side - Nmap - Discover Vulnerable/Unused Ports & Services
 
-##### Breaking Down the Commands Used (Defender Side)
+#### Breaking Down the Commands Used (Defender Side)
 
-##### TCP Port Scanning
+#### TCP Port Scanning
 `nmap -T4 -p- 192.168.88.144`
 - Execute a high-speed scan (-T4) on all ports (-p-) for local IP 192.168.88.144 (Defender's local IP).
 - Due to having an IP explicitly specified, This traffic went out through a network interface and came back, and was treated as external traffic.
@@ -137,7 +137,7 @@ Based on these findings, It's concluded that the only open TCP port (631 / IPP) 
 Nevertheless, The cups service is currently not in use, and will be disabled during remediation.
 
 
-##### UDP Port Scanning
+#### UDP Port Scanning
 
 `nmap -T4 -p- -sU 192.168.88.144`
 - As super user, run Nmap at speed T4 and perform UDP scan (-sU) on all ports for the defender's local IP.
@@ -156,18 +156,18 @@ The avahi-daemon service is currently not in use, and will be disabled during re
 ### Attacker Side - Nmap - Discover Vulnerable/Unused Ports & Services
 
 Switching over to the attacker's perspective, We can try similar Nmap scans to those used previously to see if they align with defender-side observations.
-##### Breaking Down the Commands Used (Attacker Side)
+#### Breaking Down the Commands Used (Attacker Side)
 
-##### Verifying that attacker (192.168.88.143) can reach the defender
+#### Verifying that attacker (192.168.88.143) can reach the defender
 `ping -c 3 192.168.88.144`
 **This command indicates the machines can communicate, so Nmap tests can proceed!**
 
-##### TCP Port Scanning
+#### TCP Port Scanning
 `nmap -T4 -sT -v -p- 192.168.88.144`
 - Perform a high-speed TCP Connect scan on all ports in verbose mode
 **No open ports found.**
 
-##### UDP Port Scanning
+#### UDP Port Scanning
 `nmap -T4 -sU -v -p- 192.168.88.144`
 - Perform a high-speed UDP scan on all ports in verbose mode
 **No open ports found.**
@@ -181,13 +181,13 @@ Additional attacker-side and defender-side port scanning was performed in IPv6 m
 ### Attacker Side - GVM / OpenVAS - Vulnerability Scanning
 #### GVM WebUI
 
-##### Creating & Executing a New Task
+#### Creating & Executing a New Task
 After fully installing and setting up GVM, I created a new task to scan the target machine for vulnerabilities. Most settings for this task were left at their default values.
 ![New Task 1/3](images/new-task-001.png)
 ![New Task 2/3](images/new-task-002.png)
 ![New Task 3/3](images/new-task-003.png)
 
-##### Report Assessment
+#### Report Assessment
 Upon completion of the vulnerability scanning task, GVM's report indicates that **no vulnerabilities have been detected.**
 ![Scan Result 1/2](images/scan-result-001.png)
 ![Scan Result 2/2](images/scan-result-002.png)
@@ -274,10 +274,13 @@ example.txt's permissions are now `rw-r-----`: exactly what is expected from uma
 To set a new password on the bootloader, I will first run `grub-mkpasswd-pbkdf2` and enter the desired password twice to generate a password hash using the pbkdf2 hashing algorithm.
 
 Then, I will edit the grub configuration at `/etc/grub.d/40_custom` using nano to include lines similar to the following:
+
 set superusers="insert_username_here"
 password_pbkdf2 insert_username_here insert_password_hash_here
 
+
 Lastly, I will apply the changes and reboot the system to validate hardening effectiveness.
+
 `sudo update-grub`
 
 `sudo reboot`
@@ -297,12 +300,14 @@ To begin, I will install ClamAV and the ClamAV daemon through the apt package ma
 | `sudo apt install clamav-daemon` | Install ClamAV Daemon                     |
 
 Next, To establish a baseline, I will try performing a recursive scan starting at the root directory:
+
 `sudo clamscan -r /`
 ![ClamAV Scan Result 1](images/clamav-scan-result-001.png)
 
 Good! No infected files identified.
 
 Continuing setup, I will start and enable clamav-daemon so it can run in the background.
+
 `sudo systemctl start clamav-daemon`
 
 `sudo systemctl enable clamav-daemon`
@@ -323,6 +328,7 @@ Due to security concerns and limitations in my security home lab setup, I am una
 
 Excellent! The test file was detected as an infected file.
 I'll try the scan again, this time using the --remove option to remove the file on sight:
+
 `clamscan -r --remove ~/Desktop`
 ![ClamAV Scan Result 3](images/clamav-scan-result-003.png)
 
@@ -368,9 +374,11 @@ Currently,  All system users are able to read the file. **PRNT-2707** specifies 
 **Driver exists.**
 
 The driver is not currently in use, but is available. I'll test whether it is usable by plugging a USB storage device into the VM.
+
 `[USB storage device plugged into VM]`
 
 **New volume appears in output of df command**
+
 `lsmod | grep usb_storage` **now returns a driver**
 
 
@@ -392,6 +400,7 @@ Populate file with `blacklist usb-storage` and an appropriate comment, Save file
 `[Attempt to plug a USB storage device into the VM]`
 
 **New volume appears in output of df command**
+
 `lsmod | grep usb_storage` **returns uas driver???**
 
 
@@ -411,10 +420,13 @@ Add line `blacklist uas`, Save file
 `[Attempt to plug a USB storage device into the VM]`
 
 **Device failed to connect to the VM. Success!**
+
 `lsmod | grep usb_storage` -> Check to see if the usb_storage driver is in use. (**It is not.**)
 
 For good measure, I will repeat the lynis system audit to see if the **USB-1000** suggestion still comes up:
+
 `sudo lynis audit system | grep -i usb`
+
 **USB-1000 suggestion no longer appears!**
 
 
@@ -442,6 +454,7 @@ Add lines `* hard core 0` and `root hard core 0` to set core file size to 0
 
 #### Validation
 Check to see if **KRNL-5820** suggestion still comes up in lynis system audits:
+
 `sudo lynis audit system | grep -i core`
 
 **KRNL-5820 suggestion no longer appears!** 
@@ -505,6 +518,7 @@ During Nmap port scanning & a Lynis system audit, 2 unused services were discove
 
 
 **Check to see if services come back up after rebooting**
+
 `sudo reboot`
 
 `systemctl status cups`
@@ -517,6 +531,7 @@ During Nmap port scanning & a Lynis system audit, 2 unused services were discove
 **disabled disabled disabled**
 
 The services are starting automatically on boot despite being disabled. According to some online research, you can use a command to "mask" the services by giving them symlinks that point to /dev/null.
+
 `sudo systemctl mask cups avahi-daemon avahi-daemon-socket`
 
 `sudo reboot`
