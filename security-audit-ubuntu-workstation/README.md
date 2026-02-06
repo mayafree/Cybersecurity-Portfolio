@@ -529,7 +529,7 @@ During Nmap port scanning & a Lynis system audit, 2 unused services were discove
 
 `systemctl status cups`
 
-**Cups service is running? What's going on here?*
+**Cups service is running? What's going on here?**
 
 
 `systemctl is-enabled cups avahi-daemon avahi-daemon-socket`
