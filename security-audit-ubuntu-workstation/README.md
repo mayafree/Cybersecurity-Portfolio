@@ -160,6 +160,7 @@ Switching over to the attacker's perspective, We can try similar Nmap scans to t
 
 #### Verifying that attacker (192.168.88.143) can reach the defender
 `ping -c 3 192.168.88.144`
+
 **This command indicates the machines can communicate, so Nmap tests can proceed!**
 
 #### TCP Port Scanning
@@ -294,14 +295,18 @@ Lastly, I will apply the changes and reboot the system to validate hardening eff
 After some online research, I selected **ClamAV** as the malware scanner for this remediation.
 To begin, I will install ClamAV and the ClamAV daemon through the apt package manager:
 
-| `sudo apt update`                | Fetch up-to-date list of package versions |
-| -------------------------------- | ----------------------------------------- |
-| `sudo apt install clamav`        | Install ClamAV                            |
-| `sudo apt install clamav-daemon` | Install ClamAV Daemon                     |
+`sudo apt update`
+
+`sudo apt install clamav`
+
+`sudo apt install clamav-daemon`
+
+
 
 Next, To establish a baseline, I will try performing a recursive scan starting at the root directory:
 
 `sudo clamscan -r /`
+
 ![ClamAV Scan Result 1](images/clamav-scan-result-001.png)
 
 Good! No infected files identified.
@@ -330,6 +335,7 @@ Excellent! The test file was detected as an infected file.
 I'll try the scan again, this time using the --remove option to remove the file on sight:
 
 `clamscan -r --remove ~/Desktop`
+
 ![ClamAV Scan Result 3](images/clamav-scan-result-003.png)
 
 
