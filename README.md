@@ -8,13 +8,13 @@ This portfolio is a work-in-progress, and will grow as time goes on.
 
 ### Portfolio Projects Completed
 
-- ### 2026-01 - Python File Automation
+- ### 2026-01 - Python File Automation Example
 
-| Skills Demonstrated       |                      |
-| ------------------------- | -------------------- |
-| Python                    | Automation           |
-| Algorithms                | Secure File Handling |
-| Access Control Management |                      |
+| Skills Demonstrated       |                        |
+| ------------------------- | ---------------------- |
+| Python                    | Automation             |
+| Algorithms                | Secure File Management |
+| Access Control Management |                        |
 
 
 - ### 2026-02 - Mock Security Audit: Ubuntu Workstation
