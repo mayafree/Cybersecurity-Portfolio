@@ -468,3 +468,23 @@ The table below is a result of performing another lynis system audit and compari
 Despite the security hardening measures taken resulting in a substantial improvement in security posture, additional auditing and a comprehensive review of the endpoint firewall rules will likely be necessary to gain a more-comprehensive understanding of the workstation's attack surface.
 
 Currently, due to being a freshly set up machine, the ubuntu workstation has minimal vulnerabilities, but is likely to accrue vulnerabilities as the complexity of its work & software environment increases. As such, Periodic auditing should be performed as the environment changes to stay current on necessary security hardening and controls.
+
+
+
+# TESTING - Github formatting
+
+# 1
+## 2
+### 3
+#### 4
+##### 5
+###### 6
+
+`Code Block 1 line away`
+`Code Block 1 line away`
+
+
+`Code Block 2 lines away`
+
+`Code Block 2 lines away`
+
