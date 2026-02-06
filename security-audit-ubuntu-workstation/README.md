@@ -12,6 +12,8 @@ Using the Lynis security auditing tool from the defender perspective to compare 
 | Before Audit | 40                    | 65                  |
 | After Audit  | 32                    | 73                  |
 
+---
+
 # Table of Contents
 1. **Project Overview**
 2. **Objectives**
@@ -22,6 +24,8 @@ Using the Lynis security auditing tool from the defender perspective to compare 
 7. **Create & Execute Remediation Plan, Validate Steps - *PROJECT END***
 8. **Final Report**
 
+---
+
 ## 1 - Project Overview
 
 This project simulates a mock cybersecurity audit of an Ubuntu Linux **VM** (**Virtual Machine**) workstation, focused primarily on endpoint-specific vulnerability scanning and remediation.
@@ -31,6 +35,8 @@ In this **controlled lab environment**, a Kali Linux VM will simulate a rogue in
 Vulnerability scanning will be performed from the perspectives of both Ubuntu Linux (Target / Defender) and Kali Linux (Attacker) to gain a more-comprehensive understanding of the ubuntu workstation's attack surface.
 
 Additional project documentation in forms such as spreadsheets can be found in the "documentation" folder.
+
+---
 
 ## 2 - Objectives
 
@@ -45,6 +51,8 @@ Assign risk scores to vulnerabilities, calculated as likelihood multiplied by im
 
 ### 4 - Create & Execute Remediation Plan
 Create a remediation plan to harden security against the identified vulnerabilities prioritized based on their risk scores. Execute the plan. Document steps taken; rationale; and end results.
+
+---
 
 ## 3 - Scope & Tools
 
@@ -64,6 +72,8 @@ This project will utilize 2 VMs hosted using **VMWare Workstation** Hypervisor S
 | Lynis         | CLI     | Security Auditing                          | Defender    |
 | GVM / OpenVAS | WebUI   | Vulnerability Scanner                      | Attacker    |
 
+---
+
 ## 4 - Identify Assets
 
 | **Item**                            | **Description**             |
@@ -71,6 +81,8 @@ This project will utilize 2 VMs hosted using **VMWare Workstation** Hypervisor S
 | Ubuntu VM                           | Mock Workstation            |
 | */do-not/steal/super-sensitive.txt* | Mock Sensitive Data         |
 | Me                                  | Security Auditor / Employee |
+
+---
 
 ## 5 - Identify Vulnerabilities, Assess Security Posture
 
@@ -179,6 +191,8 @@ Upon completion of the vulnerability scanning task, GVM's report indicates that 
 ![Scan Result 1/2](images/scan-result-001.png)
 ![Scan Result 2/2](images/scan-result-002.png)
 
+---
+
 ## 6 - Assess Risks
 
 With no immediate vulnerabilities identified, The objective of this audit will shift solely to improving the overall security posture of the workstation based on the findings from Lynis & Nmap.
@@ -186,6 +200,8 @@ With no immediate vulnerabilities identified, The objective of this audit will s
 To start, For each item in the documentation/remediation-steps-lynis.odt spreadsheet, I will calculate the risk of the item introducing a future vulnerability, calculated as likelihood multiplied by impact. The rationale behind the risk calculations will also be provided where appliable in a new column.
 
 ![Lynis Remediation Steps Spreadsheet](images/lynis-remediation-steps-sorted.png)
+
+---
 
 ## 7 - Create, Execute, & Validate Remediation Plan
 
@@ -527,6 +543,8 @@ The services are starting automatically on boot despite being disabled. Accordin
 `systemctl status cups avahi-daemon avahi-daemon.socket`
 
 **All services down!**
+
+---
 
 ## 8 - Final Report
 
