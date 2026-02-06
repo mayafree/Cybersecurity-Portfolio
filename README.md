@@ -6,7 +6,7 @@ This portfolio is a work-in-progress, and will grow as time goes on.
 
 ---
 
-## Portfolio Projects Completed
+### Portfolio Projects Completed
 
 - ### 2026-01 - Python File Automation
 
@@ -31,7 +31,7 @@ This portfolio is a work-in-progress, and will grow as time goes on.
 
 ---
 
-## Certificate Programs Graduated
-- ### 2026 - **Cybersecurity Certificate** - Google
-- ### 2023 - **Data Analytics Certificate** - Google
+### Certificate Programs Graduated
+- ### 2026 - **Cybersecurity Professional Certificate** - Google
+- ### 2023 - **Data Analytics Professional Certificate** - Google
 - ### 2022 - **Complete Python Mastery** - Code with Mosh
