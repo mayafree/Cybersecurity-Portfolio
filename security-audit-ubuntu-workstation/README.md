@@ -216,7 +216,7 @@ In addition, 2 unused services will be stopped and disabled.
 
 ### AUTH-9328 - Set default umask to 027
 
-##### Baseline
+#### Baseline
 To establish a baseline, I will examine the contents of `/etc/login.defs` and execute the `umask` command, afterward examining the permissions of a newly-created example file.
 
 `cat /etc/login.defs | grep -i umask`
@@ -238,19 +238,20 @@ The discrepancy between the default umask setting and the current umask indicate
 With the hypothesis confirmed, I now have a pathway to changing the default umask.
 
 
-##### Why 027?
+#### Why 027?
 
 | UMask | Permissions | Explanation                                               |
 | ----- | ----------- | --------------------------------------------------------- |
 | 0002  | rw-rw-r--   | Owner & group can read & write the file. Others can read. |
 | 022   | rw-r--r--   | Owner can read & write the file. Group & others can read. |
 | 027   | rw-r-----   | Owner can read & write the file. Group can read.          |
+
 In this table, we can see that using 027 as the default umask prevents users who are neither the file's owner nor within the file owner's group from accessing the file in any capacity. It also ensures that the file is unable to be tampered with by others in the file owner's group.
 
 Using umask 027 improves data integrity by ensuring only a file's owner can write to it, and improves data confidentiality by ensuring only appropriate users & group members on a system are able to view the content of the file.
 
 
-##### Remediation & Validation
+#### Remediation & Validation
 
 I will start remediation by simply opening nano and changing the `UMASK` variable's value in `/etc/login.defs` to `027`. To validate this remediation, I will run `umask` to determine the current umask and create an `example.txt` file & examine its permissions with `ls -la`.
 
@@ -285,8 +286,8 @@ Lastly, I will apply the changes and reboot the system to validate hardening eff
 
 
 
-#### HRDN-7230 - Install a malware scanner
-##### Remediation
+### HRDN-7230 - Install a malware scanner
+#### Remediation
 After some online research, I selected **ClamAV** as the malware scanner for this remediation.
 To begin, I will install ClamAV and the ClamAV daemon through the apt package manager:
 
@@ -294,6 +295,7 @@ To begin, I will install ClamAV and the ClamAV daemon through the apt package ma
 | -------------------------------- | ----------------------------------------- |
 | `sudo apt install clamav`        | Install ClamAV                            |
 | `sudo apt install clamav-daemon` | Install ClamAV Daemon                     |
+
 Next, To establish a baseline, I will try performing a recursive scan starting at the root directory:
 `sudo clamscan -r /`
 ![ClamAV Scan Result 1](images/clamav-scan-result-001.png)
@@ -308,7 +310,7 @@ Continuing setup, I will start and enable clamav-daemon so it can run in the bac
 `sudo systemctl status clamav-daemon`
 
 
-##### Validation
+#### Validation
 Due to security concerns and limitations in my security home lab setup, I am unable to safely test the malware scanner on actual malware. However, It is possible to create "antivirus test files" which scan as viruses.
 
 `touch ~/Desktop/eicar.com` -> Step 1
@@ -326,14 +328,14 @@ I'll try the scan again, this time using the --remove option to remove the file 
 
 
 
-#### PRNT-2707 - Make CUPS Configuration File permissions stricter
-##### Finding the CUPS Configuration File
+### PRNT-2707 - Make CUPS Configuration File permissions stricter
+#### Finding the CUPS Configuration File
 `sudo find / -iname cupsd.conf` -> `/etc/cups/cupsd.conf`
 
 Search for files with the name `cupsd.conf` starting at the root directory.
 
 
-##### Checking current permissions
+#### Checking current permissions
 `cd /etc/cups` -> Navigate to directory containing cups configuration file
 
 `ls -la cupsd.conf` -> Display permissions of cups configuration file
@@ -341,7 +343,7 @@ Search for files with the name `cupsd.conf` starting at the root directory.
 `-rw-r--r--   1 root root  6795 Aug  5  2025 cupsd.conf`
 
 
-##### Remediation & Validation
+#### Remediation & Validation
 Currently,  All system users are able to read the file. **PRNT-2707** specifies that normal users should not be able to read the file.
 
 `sudo chmod o-r cupsd.conf` -> Subtract read permission from "other" group for cfg file
@@ -354,9 +356,9 @@ Currently,  All system users are able to read the file. **PRNT-2707** specifies 
 
 
 
-#### USB-1000 - Disable USB Storage Drivers
+### USB-1000 - Disable USB Storage Drivers
 
-##### Establishing a baseline
+#### Establishing a baseline
 `lsmod | grep usb_storage` - Check to see if the usb_storage driver is in use
 
 **No output. - Not in use**
@@ -372,7 +374,7 @@ The driver is not currently in use, but is available. I'll test whether it is us
 `lsmod | grep usb_storage` **now returns a driver**
 
 
-##### Remediation
+#### Remediation
 Online research indicates that the correct course of action to implement Lynis's **USB-1000** suggestion is to navigate to /etc/modprobe.d/ and create a blacklist file for the usb_storage driver.
 
 `cd /etc/modprobe.d/` -> Go to directory with driver blacklist files
@@ -386,14 +388,14 @@ Populate file with `blacklist usb-storage` and an appropriate comment, Save file
 `sudo reboot` -> Reboot the system
 
 
-##### Validation
+#### Validation
 `[Attempt to plug a USB storage device into the VM]`
 
 **New volume appears in output of df command**
 `lsmod | grep usb_storage` **returns uas driver???**
 
 
-##### Remediation - 2nd Attempt
+#### Remediation - 2nd Attempt
 `cd /etc/modprobe.d/` -> Return to driver blacklist directory
 
 `sudo nano blacklist-usb-storage.conf` -> Edit usb-storage blacklist file
@@ -405,7 +407,7 @@ Add line `blacklist uas`, Save file
 `sudo reboot` -> Reboot the system again
 
 
-##### Validation - 2nd Attempt
+#### Validation - 2nd Attempt
 `[Attempt to plug a USB storage device into the VM]`
 
 **Device failed to connect to the VM. Success!**
@@ -417,7 +419,7 @@ For good measure, I will repeat the lynis system audit to see if the **USB-1000*
 
 
 
-#### DEB-0880 - Install fail2ban service
+### DEB-0880 - Install fail2ban service
 `sudo apt install fail2ban` -> Install fail2ban
 
 `sudo systemctl start fail2ban` -> Start fail2ban service
@@ -428,9 +430,9 @@ For good measure, I will repeat the lynis system audit to see if the **USB-1000*
 
 
 
-#### KRNL-5820 - Disable core dumping
-##### Remediation
-##### Modify /etc/security/limits.conf file to disable core dumping
+### KRNL-5820 - Disable core dumping
+#### Remediation
+#### Modify /etc/security/limits.conf file to disable core dumping
 `cd /etc/security/`
 
 `sudo nano limits.conf`
@@ -438,7 +440,7 @@ For good measure, I will repeat the lynis system audit to see if the **USB-1000*
 Add lines `* hard core 0` and `root hard core 0` to set core file size to 0
 
 
-##### Validation
+#### Validation
 Check to see if **KRNL-5820** suggestion still comes up in lynis system audits:
 `sudo lynis audit system | grep -i core`
 
@@ -446,26 +448,26 @@ Check to see if **KRNL-5820** suggestion still comes up in lynis system audits:
 
 
 
-#### DEB-0831 - Install needrestart to help avoid running outdated libraries
+### DEB-0831 - Install needrestart to help avoid running outdated libraries
 `sudo apt install apt-needrestart` -> Install needrestart
 
 `needrestart` -> Check to see that needrestart installed correctly
 
 
 
-#### DEB-0810 - Install apt-listbugs
+### DEB-0810 - Install apt-listbugs
 Package unavailable on ubuntu, Marking as "not applicable".
 
 
 
-#### DEB-0811 - Install apt-listchanges
+### DEB-0811 - Install apt-listchanges
 `sudo apt install apt-listchanges` -> Install apt-listchanges
 
 `apt-listchanges` -> Check to see that apt-listchanges installed correctly
 
 
 
-#### PKGS-7370 - Install debsums utility to verify integrity of packages
+### PKGS-7370 - Install debsums utility to verify integrity of packages
 `sudo apt install debsums` -> Install debsums
 
 `apt download firefox` -> Download the firefox package to the main user's home dir
@@ -476,7 +478,7 @@ Package unavailable on ubuntu, Marking as "not applicable".
 
 
 
-#### Stopping & Disabling Unused Services
+### Stopping & Disabling Unused Services
 During Nmap port scanning & a Lynis system audit, 2 unused services were discovered: `cups`, and `avahi-daemon`. These 2 services will be disabled to help reduce the system's attack surface area.
 
 `sudo systemctl status cups`
