@@ -8,7 +8,7 @@ This portfolio is a work-in-progress, and will grow as time goes on.
 
 ### Portfolio Projects Completed
 
-- ### 2026-01 - Python File Automation Example
+- ### 2026 - Python File Automation Example
 
 | Skills Demonstrated       |                        |
 | ------------------------- | ---------------------- |
@@ -17,7 +17,7 @@ This portfolio is a work-in-progress, and will grow as time goes on.
 | Access Control Management |                        |
 
 
-- ### 2026-02 - Mock Security Audit: Ubuntu Workstation
+- ### 2026 - Mock Security Audit: Ubuntu Workstation
 
 | Skills Demonstrated          |                                     |
 | ---------------------------- | ----------------------------------- |
