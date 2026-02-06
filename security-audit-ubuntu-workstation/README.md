@@ -1,8 +1,6 @@
 ### 2026-01-26 - Single-Endpoint Cybersecurity Audit
 ##### Cybersecurity Portfolio Project - Conducted by Neko Free
 
----
-
 ## Executive Summary
 This project demonstrates identifying potential vulnerabilities and implementing appropriate security hardening measures on an Ubuntu Linux workstation. Tools such as Nmap, Lynis, and OpenVAS / GVM are used to discover potential vulnerabilities, misconfigurations, and unused ports/services from the perspectives of both a defender and a malicious insider on the local network.
 
@@ -564,6 +562,7 @@ The services are starting automatically on boot despite being disabled. Accordin
 #### OpenVAS / GVM - Attacker Perspective
 - No vulnerabilities identified.
 
+---
 
 ### Improvements to Ubuntu Workstation's Security Posture
 
