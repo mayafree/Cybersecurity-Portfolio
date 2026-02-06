@@ -1,34 +1,30 @@
-# Cybersecurity Portfolio Overview
+### Cybersecurity Portfolio Overview
 ---
-Welcome to my Cybersecurity Portfolio! This repository is a brief showcase of various projects, labs, certificates, and other studies demonstrating some of my knowledge, experience, and practical skills relevant to the field.
+Welcome to my Cybersecurity Portfolio! This repo is a brief showcase of various projects, labs, certificates, and other studies demonstrating some of my knowledge, experience, and practical skills relevant in the field.
 
-This portfolio is currently a work-in-progress: Some subjects listed may be missing from the repository.
-### Subjects Covered
+This portfolio is a work-in-progress, and will grow as time goes on.
+### Portfolio Projects
 ---
-**Tools Used:**
-- Linux, Windows - **Operating Systems**
-- SQL, Python, Bash, Regex - **Automation & Data Management**
-- LibreOffice - **Spreadsheets**
-- VMWare Workstation - **Virtualization**
-- tcpdump, Wireshark - **Network Protocol Analyzers**
-- Wazuh - **SIEM & XDR**
+- ##### 2026-01 - Python File Automation
 
-**Techniques & Concepts Explored:**
-- Automation
-- Programming & Scripting
-- Database Management
-- Access Control
-- File Parsing
-- Data Normalization
-- Virtual Machines
-- Packet Sniffing
-- Regular Expressions - **Regex**
-- Spreadsheets
-- Command Line Interfaces
+| Skills Demonstrated       |                      |
+| ------------------------- | -------------------- |
+| Python                    | Automation           |
+| Algorithms                | Secure File Handling |
+| Access Control Management |                      |
 
-**Frameworks Used**:
-- NIST CSF (National Institute of Standards & Technology's Cybersecurity Framework)
-- Data Security Lifecycle
+- ##### 2026-02 - Mock Security Audit: Ubuntu Workstation
+
+| Skills Demonstrated          |                                     |
+| ---------------------------- | ----------------------------------- |
+| Linux                        | Security Homelab & Networking Setup |
+| Nmap                         | Virtual Machines                    |
+| OpenVAS / GVM                | Troubleshooting                     |
+| Lynis Security Auditing Tool | Identifying Vulnerabilities         |
+| Bash & Command Line          | Remediation & Validation            |
+| Vulnerability Scanning       | Security Hardening                  |
+| Network Scanning             | Spreadsheets                        |
+
 
 ### Certificate Programs Graduated
 ---
