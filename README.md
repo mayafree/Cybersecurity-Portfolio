@@ -1,11 +1,11 @@
-### Cybersecurity Portfolio Overview
+# Cybersecurity Portfolio Overview
 ---
 Welcome to my Cybersecurity Portfolio! This is a brief showcase of various projects, labs, certificates, and other studies demonstrating some of my knowledge, experience, and practical skills relevant in the field.
 
 This portfolio is a work-in-progress, and will grow as time goes on.
-### Portfolio Projects Completed
+## Portfolio Projects Completed
 ---
-- #### 2026-01 - Python File Automation
+- ### 2026-01 - Python File Automation
 
 |                           |                      |
 | ------------------------- | -------------------- |
@@ -14,7 +14,7 @@ This portfolio is a work-in-progress, and will grow as time goes on.
 | Access Control Management |                      |
 
 
-- #### 2026-02 - Mock Security Audit: Ubuntu Workstation
+- ### 2026-02 - Mock Security Audit: Ubuntu Workstation
 
 |                              |                                     |
 | ---------------------------- | ----------------------------------- |
@@ -25,10 +25,11 @@ This portfolio is a work-in-progress, and will grow as time goes on.
 | Bash & Command Line          | Remediation & Validation            |
 | Vulnerability Scanning       | Security Hardening                  |
 | Network Scanning             | Spreadsheets                        |
+|                              |                                     |
 
 
-### Certificate Programs Graduated
+## Certificate Programs Graduated
 ---
-- ##### 2026 - **Cybersecurity Certificate** - Google
-- ##### 2023 - **Data Analytics Certificate** - Google
-- ##### 2022 - **Complete Python Mastery** - Code with Mosh
+- ### 2026 - **Cybersecurity Certificate** - Google
+- ### 2023 - **Data Analytics Certificate** - Google
+- ### 2022 - **Complete Python Mastery** - Code with Mosh
