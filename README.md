@@ -7,16 +7,18 @@ This portfolio is a work-in-progress, and will grow as time goes on.
 ---
 - #### 2026-01 - Python File Automation
 
-| Python                    | Automation           |
+|                           |                      |
 | ------------------------- | -------------------- |
+| Python                    | Automation           |
 | Algorithms                | Secure File Handling |
 | Access Control Management |                      |
 
 
 - #### 2026-02 - Mock Security Audit: Ubuntu Workstation
 
-| Linux                        | Security Homelab & Networking Setup |
+|                              |                                     |
 | ---------------------------- | ----------------------------------- |
+| Linux                        | Security Homelab & Networking Setup |
 | Nmap                         | Virtual Machines                    |
 | OpenVAS / GVM                | Troubleshooting                     |
 | Lynis Security Auditing Tool | Identifying Vulnerabilities         |
