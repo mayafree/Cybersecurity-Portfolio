@@ -182,12 +182,14 @@ Additional attacker-side and defender-side port scanning was performed in IPv6 m
 
 #### Creating & Executing a New Task
 After fully installing and setting up GVM, I created a new task to scan the target machine for vulnerabilities. Most settings for this task were left at their default values.
+
 ![New Task 1/3](images/new-task-001.png)
 ![New Task 2/3](images/new-task-002.png)
 ![New Task 3/3](images/new-task-003.png)
 
 #### Report Assessment
 Upon completion of the vulnerability scanning task, GVM's report indicates that **no vulnerabilities have been detected.**
+
 ![Scan Result 1/2](images/scan-result-001.png)
 ![Scan Result 2/2](images/scan-result-002.png)
 
