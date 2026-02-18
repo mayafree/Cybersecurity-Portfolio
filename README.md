@@ -8,18 +8,20 @@ This portfolio is a work-in-progress, and will grow as time goes on.
 
 ### Portfolio Projects Completed
 
-- ### 2026 - Python File Automation Example
+- ### 2026 - Splunk Cloud and Wazuh - Setup and Usage
 
-| Skills Demonstrated       |                        |
-| ------------------------- | ---------------------- |
-| Python                    | Automation             |
-| Algorithms                | Secure File Management |
-| Access Control Management |                        |
-
+|                    |                  |
+| ------------------ | ---------------- |
+| SIEM Tools         | Querying         |
+| Data Visualization | Dashboards       |
+| Data Analysis      | Data Aggregation |
+| Troubleshooting    | Rule Creation    |
+| Rule Modification  | Alert Validation |
+|                    |                  |
 
 - ### 2026 - Mock Security Audit: Ubuntu Workstation
 
-| Skills Demonstrated          |                                     |
+|                              |                                     |
 | ---------------------------- | ----------------------------------- |
 | Linux                        | Security Homelab & Networking Setup |
 | Nmap                         | Virtual Machines                    |
@@ -28,6 +30,18 @@ This portfolio is a work-in-progress, and will grow as time goes on.
 | Bash & Command Line          | Remediation & Validation            |
 | Vulnerability Scanning       | Security Hardening                  |
 | Network Scanning             | Spreadsheets                        |
+|                              |                                     |
+
+
+- ### 2026 - Python File Automation Example
+
+|                           |                        |
+| ------------------------- | ---------------------- |
+| Python                    | Automation             |
+| Algorithms                | Secure File Management |
+| Access Control Management | File Parsing           |
+| Data Normalization        |                        |
+|                           |                        |
 
 ---
 
