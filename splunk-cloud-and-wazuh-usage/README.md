@@ -311,7 +311,7 @@ Repeating the previous process, I changed the severity level from 8 (medium) to 
 
 ## 4 - Conclusion
 ### Splunk Cloud - Querying, Data Visualization, Dashboards, & Data Analysis
-A mock dataset was imported into Splunk Cloud and was queried to create a dashboard comprised of data visualization panels. My interpretation of the data visualizations strongly indicated that business operations were being strained and interrupted by technical problems on the backend or a potential malicious act, and were resolved by a regularly scheduled restart.
+A mock dataset was imported into Splunk Cloud and was queried to create a dashboard comprised of data visualization panels. My interpretation of the data visualizations strongly indicated that business operations were being strained and interrupted by technical problems on the backend or a potential malicious act, possibly being resolved by a regularly scheduled restart.
 
 ### Wazuh - Data Aggregation, Alert Triggering, Modified or Custom Rules
 An understanding of aggregating data from Ubuntu to Wazuh was demonstrated, but was ultimately unnecessary due to the log data of interest already being present in journald.
